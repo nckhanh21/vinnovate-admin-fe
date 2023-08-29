@@ -109,7 +109,7 @@
         async function getUsersByKeyword(type, keyword, cType) {
             try {
                 const response = await fetch(
-                    `http://localhost:2001/administrators/users?type=${type}&keyword=${keyword}&criteriaType=${cType}`
+                    `https://api.vinnovate.vn/administrators/users?type=${type}&keyword=${keyword}&criteriaType=${cType}`
                 );
                 const data = await response.json();
                 return data;
