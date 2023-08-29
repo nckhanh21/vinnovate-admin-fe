@@ -1,0 +1,190 @@
+<!-- home.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+    <style>
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+            white-space: normal;
+            /* Cho phép tự động xuống dòng */
+            word-wrap: break-word;
+            /* Tự động xuống dòng khi cần */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+       
+
+        .facility {
+            min-width: 300px;
+        }
+
+        .email {
+            min-width: 300px;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Danh sách người dùng</h1>
+
+        <div class="mb-3 d-flex flex-row justify-content-end align-items-center">
+            <input type="text" id="keyword" class="form-control mr-2" placeholder="Nhập từ khóa" />
+            <select id="filterSelect" class="form-control ml-2">
+                <option value="UINNOVATE">UINNOVATE</option>
+                <option value="PINNOVATE">PINNOVATE</option>
+                <option value="UIMPACT">UIMPACT</option>
+            </select>
+            <button id="searchButton" class="btn btn-primary" style="margin-left: 100px;">Search</button>
+        </div>
+        
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="email">Email</th>
+                    <th class="name">Tên</th>
+                    <th class="facility">Facility</th>
+                    <th class="role">Role</th>
+                    <th>LÃNH ĐẠO VÀ QUẢN TRỊ</th>
+                    <th>NĂNG LỰC TỔ CHỨC</th>
+                    <th>DẠY VÀ HỌC KHỞI NGHIỆP</th>
+                    <th>CHUẨN BỊ VÀ HỖ TRỢ</th>
+                    <th>CHUYỂN ĐỔI VÀ NĂNG LỰC SỐ</th>
+                    <th>TRAO ĐỔI TRI THỨC</th>
+                    <th>QUỐC TẾ HOÁ</th>
+                    <th>ĐO LƯỜNG TÁC ĐỘNG</th>
+                </tr>
+
+            </thead>
+            <tbody id="user-table-body">
+                <!-- Thông tin người dùng sẽ được thêm vào đây bằng JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        // Gọi API để lấy thông tin người dùng dựa trên từ khóa
+        async function getUsersByKeyword(type, keyword, cType) {
+            try {
+                const response = await fetch(
+                    `http://localhost:2001/administrators/users?type=${type}&keyword=${keyword}&criteriaType=${cType}`
+                );
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Lỗi khi gọi API:", error);
+                return [];
+            }
+        }
+
+        // Hiển thị thông tin người dùng trong bảng
+        async function displayUsers(type, keyword, criteriaType) {
+            const userTableBody = document.getElementById("user-table-body");
+            userTableBody.innerHTML = "";
+            const allUsers = await getUsersByKeyword(type, keyword, criteriaType);
+            console.log(allUsers);
+
+            let index = 1; // Biến số thứ tự tự động tăng
+            allUsers.forEach((user) => {
+                userTableBody.innerHTML += `
+        <tr>
+            <td>${index}</td>
+            <td class="email">${user.email}</td>
+            <td class="name">${user.name}</td>
+            <td class="facility">${user.facilityName}</td>
+            <td class="role">${user.role}</td>
+            <td>${user.results[0]?.total || '-'}</td>
+            <td>${user.results[1]?.total || '-'}</td>
+            <td>${user.results[2]?.total || '-'}</td>
+            <td>${user.results[3]?.total || '-'}</td>
+            <td>${user.results[4]?.total || '-'}</td>
+            <td>${user.results[5]?.total || '-'}</td>
+            <td>${user.results[6]?.total || '-'}</td>
+            <td>${user.results[7]?.total || '-'}</td>
+        </tr>
+        `;
+                index++; // Tăng số thứ tự sau khi sử dụng
+            });
+        }
+
+
+        // nút để gọi sự kiện khi click và search
+        async function clickSearch() {
+            const searchButton = document.getElementById("searchButton");
+            const keywordInput = document.getElementById("keyword");
+            const filterSelect = document.getElementById("filterSelect");
+            const selectedType = filterSelect.value;
+            searchButton.addEventListener("click", async () => {
+                const keyword = keywordInput.value;
+                displayUsers("", keyword,selectedType);
+            });
+        }
+
+        function filterUser() {
+            const filterSelect = document.getElementById("filterSelect");
+
+            filterSelect.addEventListener("change", () => {
+                const selectedType = filterSelect.value;
+                displayUsers("", "", selectedType);
+                if (selectedType === "UIMPACT") {
+                    window.location.href = "UIMPACT.html"; // Chuyển hướng đến trang home.html
+                } 
+                if (selectedType === "PINNOVATE") {
+                    window.location.href = "PINNOVATE.html"; // Chuyển hướng đến trang home.html
+                } 
+            });
+
+        }
+
+        // Tổng hợp tất cả các hàm vào đây
+        document.addEventListener("DOMContentLoaded", () => {
+            displayUsers("", "", "UINNOVATE");
+            clickSearch();
+            filterUser();
+        });
+    </script>
+</body>
+
+</html>

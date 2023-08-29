@@ -1,0 +1,226 @@
+<!-- home.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+    <style>
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+            white-space: normal;
+            /* Cho phép tự động xuống dòng */
+            word-wrap: break-word;
+            /* Tự động xuống dòng khi cần */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+       
+
+        .facility {
+            min-width: 300px;
+        }
+
+        .email {
+            min-width: 300px;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Danh sách người dùng</h1>
+
+        <div class="mb-3 d-flex flex-row justify-content-end align-items-center">
+            <input type="text" id="keyword" class="form-control mr-2" placeholder="Nhập từ khóa" />
+            <select id="filterSelect" class="form-control ml-2">
+                <option value="PINNOVATE">PINNOVATE</option>
+                <option value="UINNOVATE">UINNOVATE</option>
+                <option value="UIMPACT">UIMPACT</option>
+            </select>
+            <button id="searchButton" class="btn btn-primary" style="margin-left: 100px;">Search</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="email">Email</th>
+                    <th class="name">Tên</th>
+                    <th class="facility">Facility</th>
+                    <th class="role">Role</th>
+                    <th>SDG1</th>
+                    <th>SDG2</th>
+                    <th>SDG3</th>
+                    <th>SDG4</th>
+                    <th>SDG5</th>
+                    <th>SDG6</th>
+                    <th>SDG7</th>
+                    <th>SDG8</th>
+                    <th>SDG9</th>
+                    <th>SDG10</th>
+                    <th>SDG11</th>
+                    <th>SDG12</th>
+                    <th>SDG13</th>
+                    <th>SDG14</th>
+                    <th>SDG15</th>
+                    <th>SDG16</th>
+                    <th>SDG17</th>
+                </tr>
+
+            </thead>
+            <tbody id="user-table-body">
+                <!-- Thông tin người dùng sẽ được thêm vào đây bằng JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        // Gọi API để lấy thông tin người dùng dựa trên từ khóa
+        async function getUsersByKeyword(type, keyword, cType) {
+            try {
+                const response = await fetch(
+                    `https://api.vinnovate.vn/administrators/users?type=${type}&keyword=${keyword}&criteriaType=${cType}`
+                );
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Lỗi khi gọi API:", error);
+                return [];
+            }
+        }
+
+        async function clickButtons(type) {
+            const uinButton = document.getElementById("uinButton");
+            const pinButton = document.getElementById("pinButton");
+            const uimButton = document.getElementById("uimButton");
+
+            uinButton.addEventListener("click", () => {
+                displayUsers("", "", "UINNOVATE");
+            });
+
+            pinButton.addEventListener("click", () => {
+                displayUsers("", "", "PINNOVATE");
+            });
+
+            uimButton.addEventListener("click", () => {
+                displayUsers("", "", "UIMPACT");
+            });
+        }
+
+        // Hiển thị thông tin người dùng trong bảng
+        async function displayUsers(type, keyword, criteriaType) {
+            const userTableBody = document.getElementById("user-table-body");
+            userTableBody.innerHTML = "";
+            const allUsers = await getUsersByKeyword(type, keyword, criteriaType);
+            console.log(allUsers);
+
+            let index = 1; // Biến số thứ tự tự động tăng
+            allUsers.forEach((user) => {
+                userTableBody.innerHTML += `
+        <tr>
+            <td>${index}</td>
+            <td class="email">${user.email}</td>
+            <td class="name">${user.name}</td>
+            <td class="facility">${user.facilityName}</td>
+            <td class="role">${user.role}</td>
+            <td>${user.results[0]?.total || '-'}</td>
+            <td>${user.results[1]?.total || '-'}</td>
+            <td>${user.results[2]?.total || '-'}</td>
+            <td>${user.results[3]?.total || '-'}</td>
+            <td>${user.results[4]?.total || '-'}</td>
+            <td>${user.results[5]?.total || '-'}</td>
+            <td>${user.results[6]?.total || '-'}</td>
+            <td>${user.results[7]?.total || '-'}</td>
+            <td>${user.results[8]?.total || '-'}</td>
+            <td>${user.results[9]?.total || '-'}</td>
+            <td>${user.results[10]?.total || '-'}</td>
+            <td>${user.results[11]?.total || '-'}</td>
+            <td>${user.results[12]?.total || '-'}</td>
+            <td>${user.results[13]?.total || '-'}</td>
+            <td>${user.results[14]?.total || '-'}</td>
+            <td>${user.results[15]?.total || '-'}</td>
+            <td>${user.results[16]?.total || '-'}</td>
+        </tr>
+        `;
+                index++; // Tăng số thứ tự sau khi sử dụng
+            });
+        }
+
+
+        // nút để gọi sự kiện khi click và search
+        async function clickSearch() {
+            const searchButton = document.getElementById("searchButton");
+            const keywordInput = document.getElementById("keyword");
+            const filterSelect = document.getElementById("filterSelect");
+            const selectedType = filterSelect.value;
+            searchButton.addEventListener("click", async () => {
+                const keyword = keywordInput.value;
+                displayUsers("", keyword, selectedType);
+            });
+        }
+
+        function filterUser() {
+            const filterSelect = document.getElementById("filterSelect");
+
+            filterSelect.addEventListener("change", () => {
+                const selectedType = filterSelect.value;
+                displayUsers("", "", selectedType);
+                if (selectedType === "UINNOVATE") {
+                    window.location.href = "UINNOVATE.html"; // Chuyển hướng đến trang home.html
+                } 
+                if (selectedType === "PINNOVATE") {
+                    window.location.href = "PINNOVATE.html"; // Chuyển hướng đến trang home.html
+                } 
+            });
+
+        }
+
+        // Tổng hợp tất cả các hàm vào đây
+        document.addEventListener("DOMContentLoaded", () => {
+            displayUsers("", "", "UINNOVATE");
+            clickSearch();
+            clickButtons();
+            filterUser();
+        });
+    </script>
+</body>
+
+</html>
