@@ -70,9 +70,9 @@
         <div class="mb-3 d-flex flex-row justify-content-end align-items-center">
             <input type="text" id="keyword" class="form-control mr-2" placeholder="Nhập từ khóa" />
             <select id="filterSelect" class="form-control ml-2">
+                <option value="UIMPACT">UIMPACT</option>
                 <option value="PINNOVATE">PINNOVATE</option>
                 <option value="UINNOVATE">UINNOVATE</option>
-                <option value="UIMPACT">UIMPACT</option>
             </select>
             <button id="searchButton" class="btn btn-primary" style="margin-left: 100px;">Search</button>
         </div>
@@ -215,7 +215,7 @@
 
         // Tổng hợp tất cả các hàm vào đây
         document.addEventListener("DOMContentLoaded", () => {
-            displayUsers("", "", "UINNOVATE");
+            displayUsers("", "", "UIMPACT");
             clickSearch();
             clickButtons();
             filterUser();

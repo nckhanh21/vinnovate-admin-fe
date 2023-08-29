@@ -104,7 +104,7 @@
         async function getUsersByKeyword(type, keyword, cType) {
             try {
                 const response = await fetch(
-                    `https://api.vinnovate.vn/administrators/users?type=${type}&keyword=${keyword}&criteriaType=${cType}`
+                    `https:api.vinnovate.vn/administrators/users?type=${type}&keyword=${keyword}&criteriaType=${cType}`
                 );
                 const data = await response.json();
                 return data;
@@ -114,23 +114,6 @@
             }
         }
 
-        async function clickButtons(type) {
-            const uinButton = document.getElementById("uinButton");
-            const pinButton = document.getElementById("pinButton");
-            const uimButton = document.getElementById("uimButton");
-
-            uinButton.addEventListener("click", () => {
-                displayUsers("", "", "UINNOVATE");
-            });
-
-            pinButton.addEventListener("click", () => {
-                displayUsers("", "", "PINNOVATE");
-            });
-
-            uimButton.addEventListener("click", () => {
-                displayUsers("", "", "UIMPACT");
-            });
-        }
 
         // Hiển thị thông tin người dùng trong bảng
         async function displayUsers(type, keyword, criteriaType) {
@@ -177,10 +160,10 @@
                 const selectedType = filterSelect.value;
                 displayUsers("", "", selectedType);
                 if (selectedType === "UIMPACT") {
-                    window.location.href = "UIMPACT.html"; // Chuyển hướng đến trang home.html
+                    window.location.href = "UIMPACT.html"; 
                 } 
                 if (selectedType === "UINNOVATE") {
-                    window.location.href = "UINNOVATE.html"; // Chuyển hướng đến trang home.html
+                    window.location.href = "UINNOVATE.html";
                 } 
             });
 
@@ -188,9 +171,8 @@
 
         // Tổng hợp tất cả các hàm vào đây
         document.addEventListener("DOMContentLoaded", () => {
-            displayUsers("", "", "UINNOVATE");
+            displayUsers("", "", "PINNOVATE");
             clickSearch();
-            clickButtons();
             filterUser();
         });
     </script>
